@@ -3,6 +3,7 @@ from typing import Optional
 
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from fastapi.security import OAuth2PasswordRequestForm
 
 from auth import (
@@ -276,5 +277,6 @@ def get_medical_record(record_id: str, current_user: dict = Depends(get_current_
         raise HTTPException(status_code=403, detail="Access denied")
     if current_user["role"] == "doctor" and rec["doctor_id"] != current_user.get("doctor_id"):
         raise HTTPException(status_code=403, detail="Access denied")
-
     return rec
+
+app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")

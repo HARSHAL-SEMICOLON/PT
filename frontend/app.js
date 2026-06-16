@@ -1,4 +1,17 @@
-const API_BASE_URL = 'http://127.0.0.1:8000';
+// Resolve the API URL
+function getApiUrl() {
+  const savedUrl = localStorage.getItem('custom_backend_url');
+  if (savedUrl) {
+    return savedUrl.replace(/\/$/, ''); // Remove trailing slash
+  }
+  // Local development fallbacks
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.port === '3000') {
+    return 'http://127.0.0.1:8000';
+  }
+  return window.location.origin;
+}
+
+let API_BASE_URL = getApiUrl();
 
 // App State
 let token = localStorage.getItem('token') || '';
@@ -55,6 +68,13 @@ const patientRecordsList = document.getElementById('patient-records-list');
 
 // Toast Element
 const toast = document.getElementById('toast');
+
+// DOM Selectors - API Configuration
+const btnApiSettings = document.getElementById('btn-api-settings');
+const apiModal = document.getElementById('api-modal');
+const inputApiUrl = document.getElementById('input-api-url');
+const btnApiSave = document.getElementById('btn-api-save');
+const btnApiClose = document.getElementById('btn-api-close');
 
 // Mode tracking
 let isLoginMode = true;
@@ -132,6 +152,35 @@ authForm.addEventListener('submit', async (e) => {
 
 bookApptForm.addEventListener('submit', handleBookAppointment);
 recordForm.addEventListener('submit', handleAddMedicalRecord);
+
+// API Settings Modal Event Listeners
+btnApiSettings.addEventListener('click', (e) => {
+  e.preventDefault();
+  inputApiUrl.value = localStorage.getItem('custom_backend_url') || '';
+  apiModal.classList.remove('hidden');
+});
+
+btnApiClose.addEventListener('click', (e) => {
+  e.preventDefault();
+  apiModal.classList.add('hidden');
+});
+
+btnApiSave.addEventListener('click', (e) => {
+  e.preventDefault();
+  const newUrl = inputApiUrl.value.trim();
+  if (newUrl) {
+    localStorage.setItem('custom_backend_url', newUrl);
+  } else {
+    localStorage.removeItem('custom_backend_url');
+  }
+  API_BASE_URL = getApiUrl();
+  apiModal.classList.add('hidden');
+  showToast('API Backend URL updated!');
+  
+  if (token) {
+    initApp();
+  }
+});
 
 // ── Toast Utility ────────────────────────────────────────────────────────────
 

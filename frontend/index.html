@@ -20,10 +20,13 @@
         <span class="icon">🏥</span>
         <h1>CarePulse</h1>
       </div>
-      <div id="user-nav" class="user-nav hidden">
-        <span id="user-greeting">Welcome, User</span>
-        <span id="user-role-badge" class="badge">Role</span>
-        <button id="btn-logout" class="btn btn-secondary">Logout</button>
+      <div class="header-actions">
+        <button id="btn-api-settings" class="btn-icon" title="Configure API Backend">⚙️ Settings</button>
+        <div id="user-nav" class="user-nav hidden">
+          <span id="user-greeting">Welcome, User</span>
+          <span id="user-role-badge" class="badge">Role</span>
+          <button id="btn-logout" class="btn btn-secondary">Logout</button>
+        </div>
       </div>
     </header>
 
@@ -196,6 +199,23 @@
       </div>
 
     </main>
+  </div>
+
+  <!-- API Settings Modal -->
+  <div id="api-modal" class="modal-overlay hidden">
+    <div class="glass-panel modal-card">
+      <h3>API Configuration</h3>
+      <p class="modal-subtitle">Configure the backend API URL for this application.</p>
+      <div class="form-group">
+        <label for="input-api-url">Backend URL</label>
+        <input type="url" id="input-api-url" placeholder="https://your-backend.onrender.com">
+        <small class="helper-text">Leave blank to use current origin / default.</small>
+      </div>
+      <div class="modal-buttons">
+        <button id="btn-api-save" class="btn btn-primary">Save Settings</button>
+        <button id="btn-api-close" class="btn btn-secondary">Cancel</button>
+      </div>
+    </div>
   </div>
 
   <!-- Notification Toast -->
