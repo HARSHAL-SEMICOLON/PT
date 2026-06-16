@@ -57,12 +57,13 @@ def get_user_by_id(user_id: str) -> Optional[dict]:
     user = resp.data[0]
 
     # 2. Depending on role, fetch profile details
-    if user["role"] == "patient":
+    role_lower = user["role"].lower()
+    if role_lower == "patient":
         p_resp = supabase.table("patients").select("id, phone").eq("user_id", user_id).execute()
         if p_resp.data:
             user["patient_id"] = p_resp.data[0]["id"]
             user["phone"] = p_resp.data[0]["phone"]
-    elif user["role"] == "doctor":
+    elif role_lower == "doctor":
         d_resp = supabase.table("doctors").select("id, specialization").eq("user_id", user_id).execute()
         if d_resp.data:
             user["doctor_id"] = d_resp.data[0]["id"]

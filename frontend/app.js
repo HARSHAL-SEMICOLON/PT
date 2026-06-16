@@ -302,7 +302,7 @@ async function initApp() {
     // Update header nav
     userGreeting.textContent = `Welcome, ${currentUser.name}`;
     userRoleBadge.textContent = currentUser.role;
-    userRoleBadge.className = `badge ${currentUser.role}`;
+    userRoleBadge.className = `badge ${currentUser.role.toLowerCase()}`;
     userNav.classList.remove('hidden');
     
     // Toggle dashboards
@@ -322,10 +322,11 @@ function loadDashboard() {
   doctorDashboard.classList.add('hidden');
   patientDashboard.classList.add('hidden');
   
-  if (currentUser.role === 'doctor') {
+  const role = currentUser.role.toLowerCase();
+  if (role === 'doctor') {
     doctorDashboard.classList.remove('hidden');
     initDoctorDashboard();
-  } else if (currentUser.role === 'patient') {
+  } else if (role === 'patient') {
     patientDashboard.classList.remove('hidden');
     initPatientDashboard();
   }
@@ -497,7 +498,7 @@ window.cancelAppointment = async function(id) {
     await apiRequest(`/appointments/${id}`, { method: 'DELETE' });
     showToast('Appointment cancelled successfully.');
     
-    if (currentUser.role === 'patient') {
+    if (currentUser.role.toLowerCase() === 'patient') {
       loadPatientAppointments();
     } else {
       loadDoctorAppointments();
