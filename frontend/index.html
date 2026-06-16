@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clinic Appointment Management System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div class="background-decor blob1"></div>
+  <div class="background-decor blob2"></div>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="glass-panel main-header">
+      <div class="logo">
+        <span class="icon">🏥</span>
+        <h1>CarePulse</h1>
+      </div>
+      <div id="user-nav" class="user-nav hidden">
+        <span id="user-greeting">Welcome, User</span>
+        <span id="user-role-badge" class="badge">Role</span>
+        <button id="btn-logout" class="btn btn-secondary">Logout</button>
+      </div>
+    </header>
+
+    <!-- Auth Section -->
+    <main id="auth-section" class="auth-wrapper">
+      <div class="glass-panel auth-card">
+        <h2 id="auth-title">Welcome Back</h2>
+        <p id="auth-subtitle">Log in to manage your clinic appointments</p>
+        
+        <form id="auth-form" class="auth-form">
+          <div class="form-group register-only hidden">
+            <label for="reg-name">Full Name</label>
+            <input type="text" id="reg-name" placeholder="Enter your full name">
+          </div>
+
+          <div class="form-group">
+            <label for="auth-email">Email Address</label>
+            <input type="email" id="auth-email" required placeholder="name@example.com">
+          </div>
+
+          <div class="form-group">
+            <label for="auth-password">Password</label>
+            <input type="password" id="auth-password" required placeholder="••••••••">
+          </div>
+
+          <div class="form-group register-only hidden">
+            <label for="reg-role">I am a</label>
+            <select id="reg-role">
+              <option value="patient">Patient</option>
+              <option value="doctor">Doctor</option>
+            </select>
+          </div>
+
+          <!-- Doctor fields -->
+          <div id="doctor-fields" class="form-group register-only hidden-fields hidden">
+            <label for="reg-specialization">Specialization</label>
+            <input type="text" id="reg-specialization" placeholder="e.g. Cardiology, Pediatrics">
+          </div>
+
+          <!-- Patient fields -->
+          <div id="patient-fields" class="form-group register-only hidden-fields hidden">
+            <label for="reg-phone">Phone Number</label>
+            <input type="text" id="reg-phone" placeholder="e.g. +91 99999 99999">
+          </div>
+
+          <button type="submit" id="btn-auth-submit" class="btn btn-primary">Login</button>
+        </form>
+
+        <div class="auth-toggle">
+          <span id="auth-toggle-text">Don't have an account?</span>
+          <button id="btn-toggle-auth" class="btn-link">Register</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Dashboard Section -->
+    <main id="dashboard-section" class="dashboard-wrapper hidden">
+      
+      <!-- Doctor Dashboard -->
+      <div id="doctor-dashboard" class="dashboard-layout hidden">
+        <div class="dashboard-grid">
+          <!-- Appointments Column -->
+          <section class="glass-panel section-card col-span-2">
+            <div class="section-header">
+              <h2>My Appointments</h2>
+              <span class="count-badge" id="doctor-appt-count">0</span>
+            </div>
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Patient Name</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="doctor-appts-list">
+                  <!-- JS generated rows -->
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- Record Actions & Patients list -->
+          <section class="glass-panel section-card">
+            <h2>Add Medical Record</h2>
+            <form id="record-form" class="form-layout">
+              <div class="form-group">
+                <label for="record-patient-select">Select Patient</label>
+                <select id="record-patient-select" required>
+                  <option value="">Choose a patient...</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="record-diagnosis">Diagnosis</label>
+                <textarea id="record-diagnosis" rows="3" required placeholder="Enter diagnosis details..."></textarea>
+              </div>
+              <div class="form-group">
+                <label for="record-prescription">Prescription</label>
+                <textarea id="record-prescription" rows="3" required placeholder="Enter prescription instructions..."></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Save Record</button>
+            </form>
+          </section>
+        </div>
+      </div>
+
+      <!-- Patient Dashboard -->
+      <div id="patient-dashboard" class="dashboard-layout hidden">
+        <div class="dashboard-grid">
+          <!-- Book Appointment Card -->
+          <section class="glass-panel section-card">
+            <h2>Book Appointment</h2>
+            <form id="book-appt-form" class="form-layout">
+              <div class="form-group">
+                <label for="book-doctor-select">Choose Doctor</label>
+                <select id="book-doctor-select" required>
+                  <option value="">Select a specialist...</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="book-date">Appointment Date</label>
+                <input type="date" id="book-date" required>
+              </div>
+              <div class="form-group">
+                <label for="book-time">Appointment Time</label>
+                <input type="time" id="book-time" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Confirm Booking</button>
+            </form>
+          </section>
+
+          <!-- Appointments List -->
+          <section class="glass-panel section-card col-span-2">
+            <div class="section-header">
+              <h2>My Appointments</h2>
+              <span class="count-badge" id="patient-appt-count">0</span>
+            </div>
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Doctor Name</th>
+                    <th>Specialization</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="patient-appts-list">
+                  <!-- JS generated rows -->
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- Medical Records List -->
+          <section class="glass-panel section-card col-span-3">
+            <div class="section-header">
+              <h2>My Medical History & Records</h2>
+            </div>
+            <div class="records-grid" id="patient-records-list">
+              <!-- JS generated cards -->
+            </div>
+          </section>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="toast hidden">Message goes here</div>
+
+  <script src="app.js"></script>
+</body>
+</html>
