@@ -20,7 +20,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 
-# ── Password security helpers (Hashing aur verification ke liye) ──────────────
+# Password security helpers (Hashing aur verification ke liye)
 
 def verify_password(plain: str, hashed: str) -> bool:
     try:
@@ -33,7 +33,7 @@ def hash_password(password: str) -> str:
     return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
 
-# ── JWT Session helpers (Token generate karne ke liye) ────────────────────────
+# JWT Session helpers (Token generate karne ke liye)
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
     payload = data.copy()
@@ -42,7 +42,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
 
-# ── Supabase user queries (Database se users check karne ke liye) ──────────────
+# Supabase user queries (Database se users check karne ke liye)
 
 def get_user_by_email(email: str) -> Optional[dict]:
     resp = supabase.table("users").select("*").eq("email", email).execute()
@@ -148,7 +148,7 @@ def register_user(payload: UserCreate) -> dict:
     return user
 
 
-# ── FastAPI dependencies (JWT Auth checking aur session validation) ───────────
+# FastAPI dependencies (JWT Auth checking aur session validation)
 
 def get_current_user(token: str = Depends(oauth2_scheme)) -> dict:
     exc = HTTPException(

@@ -38,7 +38,7 @@ app.add_middleware(
 )
 
 
-# ── Auth endpoints (Login / Register / Profile fetch karne ke liye) ────────────
+# Auth endpoints (Login / Register / Profile fetch karne ke liye)
 
 @app.post("/auth/register", response_model=UserOut, status_code=status.HTTP_201_CREATED, tags=["Auth"])
 def register(payload: UserCreate):
@@ -64,7 +64,7 @@ def me(current_user: dict = Depends(get_current_active_user)):
     return current_user
 
 
-# ── Doctors list endpoints (Registered Doctors fetch karne ke liye) ───────────
+# Doctors list endpoints (Registered Doctors fetch karne ke liye)
 
 @app.get("/doctors", response_model=list[DoctorOut], tags=["Doctors"])
 def list_doctors(current_user: dict = Depends(get_current_active_user)):
@@ -72,7 +72,7 @@ def list_doctors(current_user: dict = Depends(get_current_active_user)):
     return resp.data
 
 
-# ── Patients list endpoints (Doctors ke dashboard ke liye) ────────────────────
+# Patients list endpoints (Doctors ke dashboard ke liye)
 
 @app.get("/patients", response_model=list[PatientOut], tags=["Patients"])
 def list_patients(current_user: dict = Depends(get_current_active_user)):
@@ -85,7 +85,7 @@ def list_patients(current_user: dict = Depends(get_current_active_user)):
     return resp.data
 
 
-# ── Appointments endpoints (Slots booking, cancel, reschedule ke liye) ────────
+# Appointments endpoints (Slots booking, cancel, reschedule ke liye)
 
 @app.post("/appointments", response_model=AppointmentOut, status_code=status.HTTP_201_CREATED, tags=["Appointments"])
 def book_appointment(payload: AppointmentCreate, current_user: dict = Depends(get_current_active_user)):
@@ -211,7 +211,7 @@ def delete_appointment(appointment_id: str, current_user: dict = Depends(get_cur
     supabase.table("appointments").delete().eq("id", appointment_id).execute()
 
 
-# ── Medical Records endpoints (Patients ki reports aur diagnosis ke liye) ──────
+# Medical Records endpoints (Patients ki reports aur diagnosis ke liye)
 
 @app.post("/medical-records", response_model=MedicalRecordOut, status_code=status.HTTP_201_CREATED, tags=["Medical Records"])
 def create_medical_record(payload: MedicalRecordCreate, current_user: dict = Depends(get_current_active_user)):
