@@ -340,8 +340,7 @@ GET  /medical-records/{id}
 ## 👨‍💻 Authors
 
 Developed by Team CarePulse
-
-*Harshal Agre
+* Harshal Agre
 * Prathmesh Bhokare
 * Rishiraj Singh Chauhan
 
