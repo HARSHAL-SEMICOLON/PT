@@ -261,7 +261,7 @@ GET  /medical-records/{id}
 ### 🔐 Login Page
 
 <p align="center">
-  <img src="screenshots/login-page.png" alt="Login Page" width="900">
+  <img src="screenshots/login-page.png.png" alt="Login Page" width="900">
 </p>
 
 ---
@@ -269,7 +269,7 @@ GET  /medical-records/{id}
 ### 📝 Registration Page
 
 <p align="center">
-  <img src="screenshots/register-page.png" alt="Registration Page" width="900">
+  <img src="screenshots/register-page.png.png" alt="Registration Page" width="900">
 </p>
 
 ---
@@ -277,15 +277,7 @@ GET  /medical-records/{id}
 ### 👨‍⚕️ Doctor Dashboard
 
 <p align="center">
-  <img src="screenshots/doctor-dashboard.png" alt="Doctor Dashboard" width="900">
-</p>
-
----
-
-### 🩺 Add Medical Record
-
-<p align="center">
-  <img src="screenshots/add-medical-record.png" alt="Medical Record Page" width="900">
+  <img src="screenshots/doctor-dashboard.png.png" alt="Doctor Dashboard" width="900">
 </p>
 
 ---
@@ -293,24 +285,12 @@ GET  /medical-records/{id}
 ### 👤 Patient Dashboard
 
 <p align="center">
-  <img src="screenshots/patient-dashboard.png" alt="Patient Dashboard" width="900">
+  <img src="screenshots/patient-dashboard.png.png" alt="Patient Dashboard" width="900">
 </p>
 
 ---
 
-### 📅 Appointment Booking
 
-<p align="center">
-  <img src="screenshots/book-appointment.png" alt="Appointment Booking" width="900">
-</p>
-
----
-
-### 📋 Medical History
-
-<p align="center">
-  <img src="screenshots/medical-history.png" alt="Medical History" width="900">
-</p>
 
 ## 🎯 Learning Outcomes
 
