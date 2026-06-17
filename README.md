@@ -341,7 +341,9 @@ GET  /medical-records/{id}
 
 Developed by Team CarePulse
 
+*Harshal Agre
 * Prathmesh Bhokare
+* Rishiraj Singh Chauhan
 
 ---
 
