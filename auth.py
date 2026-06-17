@@ -20,7 +20,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 
-# ── Password helpers ──────────────────────────────────────────────────────────
+# ── Password security helpers (Hashing aur verification ke liye) ──────────────
 
 def verify_password(plain: str, hashed: str) -> bool:
     try:
@@ -33,7 +33,7 @@ def hash_password(password: str) -> str:
     return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
 
-# ── JWT helpers ───────────────────────────────────────────────────────────────
+# ── JWT Session helpers (Token generate karne ke liye) ────────────────────────
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
     payload = data.copy()
@@ -42,7 +42,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
 
-# ── Supabase user helpers ─────────────────────────────────────────────────────
+# ── Supabase user queries (Database se users check karne ke liye) ──────────────
 
 def get_user_by_email(email: str) -> Optional[dict]:
     resp = supabase.table("users").select("*").eq("email", email).execute()
@@ -50,13 +50,13 @@ def get_user_by_email(email: str) -> Optional[dict]:
 
 
 def get_user_by_id(user_id: str) -> Optional[dict]:
-    # 1. Fetch from users table
+    # 1. Users table se basic user details nikal rahe hain
     resp = supabase.table("users").select("*").eq("id", user_id).execute()
     if not resp.data:
         return None
     user = resp.data[0]
 
-    # 2. Depending on role, fetch profile details
+    # 2. Role check karke uski exact profile (doctor/patient) fetch kar rahe hain
     role_lower = user["role"].lower()
     if role_lower == "patient":
         p_resp = supabase.table("patients").select("id, phone").eq("user_id", user_id).execute()
@@ -86,7 +86,7 @@ def register_user(payload: UserCreate) -> dict:
             detail="Email already registered",
         )
 
-    # 1. Insert into users table
+    # 1. Pehle base users table me record insert hoga
     user_resp = (
         supabase.table("users")
         .insert(
@@ -106,7 +106,7 @@ def register_user(payload: UserCreate) -> dict:
         )
     user = user_resp.data[0]
 
-    # 2. Insert into profile table based on role
+    # 2. Role ke hisab se specialized table (doctors/patients) me mapping insert karenge
     if payload.role == "doctor":
         doc_resp = (
             supabase.table("doctors")
@@ -117,7 +117,7 @@ def register_user(payload: UserCreate) -> dict:
             .execute()
         )
         if not doc_resp.data:
-            # Rollback user creation
+            # Agar specialized profile insert fail ho gayi, toh user record rollback (delete) kar denge
             supabase.table("users").delete().eq("id", user["id"]).execute()
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -136,7 +136,7 @@ def register_user(payload: UserCreate) -> dict:
             .execute()
         )
         if not pat_resp.data:
-            # Rollback user creation
+            # Agar specialized profile insert fail ho gayi, toh user record rollback (delete) kar denge
             supabase.table("users").delete().eq("id", user["id"]).execute()
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -148,7 +148,7 @@ def register_user(payload: UserCreate) -> dict:
     return user
 
 
-# ── FastAPI dependencies ──────────────────────────────────────────────────────
+# ── FastAPI dependencies (JWT Auth checking aur session validation) ───────────
 
 def get_current_user(token: str = Depends(oauth2_scheme)) -> dict:
     exc = HTTPException(

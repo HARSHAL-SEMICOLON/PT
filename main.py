@@ -38,7 +38,7 @@ app.add_middleware(
 )
 
 
-# ── Auth ──────────────────────────────────────────────────────────────────────
+# ── Auth endpoints (Login / Register / Profile fetch karne ke liye) ────────────
 
 @app.post("/auth/register", response_model=UserOut, status_code=status.HTTP_201_CREATED, tags=["Auth"])
 def register(payload: UserCreate):
@@ -64,7 +64,7 @@ def me(current_user: dict = Depends(get_current_active_user)):
     return current_user
 
 
-# ── Doctors ───────────────────────────────────────────────────────────────────
+# ── Doctors list endpoints (Registered Doctors fetch karne ke liye) ───────────
 
 @app.get("/doctors", response_model=list[DoctorOut], tags=["Doctors"])
 def list_doctors(current_user: dict = Depends(get_current_active_user)):
@@ -72,7 +72,7 @@ def list_doctors(current_user: dict = Depends(get_current_active_user)):
     return resp.data
 
 
-# ── Patients ──────────────────────────────────────────────────────────────────
+# ── Patients list endpoints (Doctors ke dashboard ke liye) ────────────────────
 
 @app.get("/patients", response_model=list[PatientOut], tags=["Patients"])
 def list_patients(current_user: dict = Depends(get_current_active_user)):
@@ -85,7 +85,7 @@ def list_patients(current_user: dict = Depends(get_current_active_user)):
     return resp.data
 
 
-# ── Appointments ──────────────────────────────────────────────────────────────
+# ── Appointments endpoints (Slots booking, cancel, reschedule ke liye) ────────
 
 @app.post("/appointments", response_model=AppointmentOut, status_code=status.HTTP_201_CREATED, tags=["Appointments"])
 def book_appointment(payload: AppointmentCreate, current_user: dict = Depends(get_current_active_user)):
@@ -107,7 +107,7 @@ def book_appointment(payload: AppointmentCreate, current_user: dict = Depends(ge
     if not resp.data:
         raise HTTPException(status_code=500, detail="Failed to create appointment")
 
-    # Retrieve nested representation for response_model
+    # Nested doctor aur patient fields load kar rahe hain response matching ke liye
     appt_id = resp.data[0]["id"]
     nested_resp = (
         supabase.table("appointments")
@@ -211,7 +211,7 @@ def delete_appointment(appointment_id: str, current_user: dict = Depends(get_cur
     supabase.table("appointments").delete().eq("id", appointment_id).execute()
 
 
-# ── Medical Records ───────────────────────────────────────────────────────────
+# ── Medical Records endpoints (Patients ki reports aur diagnosis ke liye) ──────
 
 @app.post("/medical-records", response_model=MedicalRecordOut, status_code=status.HTTP_201_CREATED, tags=["Medical Records"])
 def create_medical_record(payload: MedicalRecordCreate, current_user: dict = Depends(get_current_active_user)):
